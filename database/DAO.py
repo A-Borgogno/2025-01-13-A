@@ -62,3 +62,24 @@ class DAO():
             cursor.close()
             cnx.close()
         return result
+
+    @staticmethod
+    def get_distinct_localizations():
+        cnx = DBConnect.get_connection()
+        result = []
+        if cnx is None:
+            print("Connessione fallita")
+        else:
+            cursor = cnx.cursor(dictionary=True)
+            query = """SELECT DISTINCT c.Localization  
+                            FROM classification c 
+                            ORDER BY c.Localization DESC"""
+            cursor.execute(query)
+
+            for row in cursor:
+                result.append(row["Localization"])
+
+            cursor.close()
+            cnx.close()
+        return result
+
