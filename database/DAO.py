@@ -104,6 +104,28 @@ class DAO():
         return result
 
     @staticmethod
+    def get_nodes_w_essentiality(localization: str):
+        cnx = DBConnect.get_connection()
+        result = []
+        if cnx is None:
+            print("Connessione fallita")
+        else:
+            cursor = cnx.cursor(dictionary=True)
+            query = """SELECT c.GeneID, c.Localization, g.Essential
+                        FROM classification c, genes g
+                        WHERE c.Localization = %s
+                        and c.GeneID = g.GeneID 
+                        GROUP by c.GeneID, g.Essential"""
+            cursor.execute(query, (localization,))
+
+            for row in cursor:
+                result.append(Classification(**row))
+
+            cursor.close()
+            cnx.close()
+        return result
+
+    @staticmethod
     def get_all_chromosomes_interaction(interaction, chromosomes_map):
         cnx = DBConnect.get_connection()
         result = 0

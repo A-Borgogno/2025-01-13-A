@@ -44,7 +44,14 @@ class Controller:
         self._view.update_page()
 
     def handle_path(self, e):
-        pass
+        path, lun, score = self._model.get_list_nodes()
+        self._view.txt_result.controls.clear()
+        self._view.txt_result.controls.append(ft.Text("Ho trovato una soluzione lunga " + str(lun) + " con score " + str(score)))
+        self._view.txt_result.controls.append(ft.Text("Nodi nel set: "))
+        for p in path:
+            self._view.txt_result.controls.append(ft.Text(p))
+        self._view.update_page()
+
 
     def fill_dd_localization(self):
         values = self._model.get_distinct_localizations()
