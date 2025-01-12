@@ -18,6 +18,8 @@ class Model:
 
     def build_graph(self, localization):
         self._graph.clear()
+
+        #Calcolo nodi
         nodes = DAO.get_nodes(localization)
         self._graph.add_nodes_from(nodes)
 
@@ -31,7 +33,7 @@ class Model:
                     peso = self._chromosomes_map.get((nodei, nodej))
                     self._graph.add_edge(nodes[i], nodes[j], weight=peso)
 
-        # Calcolo degli edges da query
+        # Calcolo degli edges da query (commentare la parte sopra per usare questa versione)
         # edges = DAO.get_edges(localization)
         # self._graph.add_weighted_edges_from(edges)
 
@@ -48,3 +50,6 @@ class Model:
     def edges(self):
         sorted_edges = sorted(self._graph.edges(data=True), key=lambda edge: edge[2]["weight"], reverse=False)
         return sorted_edges
+
+    def get_connesse(self):
+        return sorted(nx.connected_components(self._graph), key=lambda connessa: len(connessa), reverse=True)

@@ -29,20 +29,19 @@ class Controller:
         for edge in sorted_edges:
             self._view.txt_result.controls.append(ft.Text(f"{edge[0].GeneID} <-> {edge[1].GeneID}: peso {edge[2]["weight"]}"))
 
-        # sorted_nodes = self._model.get_node_max_uscenti()
-        # n_nodi = min(len(sorted_nodes), 5)
-        # self._view.txt_result1.controls.append(ft.Text(f"\nI {n_nodi} nodi col maggior numero di archi uscenti sono:"))
-        # for i in range(n_nodi):
-        #     self._view.txt_result1.controls.append(ft.Text(f"{sorted_nodes[i][0]} | "
-        #                                                    f"num. archi uscenti: {sorted_nodes[i][1]}  | "
-        #                                                    f"peso tot.: {sorted_nodes[i][2]}"))
-
-        # self._view.btn_dettagli.disabled = False
-        # self._view.btn_path.disabled = False
         self._view.update_page()
 
-    def analyze_graph(selfself, e):
-        pass
+    def analyze_graph(self, e):
+        componenti_connesse = self._model.get_connesse()
+        self._view.txt_result.controls.append(ft.Text(f"\nLe componenti connesse sono:"))
+        for connessa in componenti_connesse:
+            if len(connessa) >1:
+                stringa = ""
+                for nodo in connessa:
+                    stringa += f"{nodo.GeneID}, "
+                stringa += f" | dimensione componente = {len(connessa)}"
+                self._view.txt_result.controls.append(ft.Text(stringa))
+        self._view.update_page()
 
     def handle_path(self, e):
         pass
