@@ -62,3 +62,64 @@ class DAO():
             cursor.close()
             cnx.close()
         return result
+
+    @staticmethod
+    def getLocalizations():
+        cnx = DBConnect.get_connection()
+        result = []
+        if cnx is None:
+            print("Connessione fallita")
+        else:
+            cursor = cnx.cursor(dictionary=True)
+            query = """SELECT distinct(Localization) as localization
+                        FROM classification
+                        order by localization desc"""
+            cursor.execute(query)
+
+            for row in cursor:
+                result.append(row["localization"])
+
+            cursor.close()
+            cnx.close()
+        return result
+
+    @staticmethod
+    def getNodes(localization):
+        cnx = DBConnect.get_connection()
+        result = []
+        if cnx is None:
+            print("Connessione fallita")
+        else:
+            cursor = cnx.cursor(dictionary=True)
+            query = """select c.*, g.Essential
+                        from classification c, genes g
+                        where c.Localization = %s
+                        and c.GeneID = g.GeneID"""
+            cursor.execute(query, (localization, ))
+
+            for row in cursor:
+                result.append(Classification(**row))
+
+            cursor.close()
+            cnx.close()
+        return result
+
+    @staticmethod
+    def getPesoArco(ID1, ID2):
+        cnx = DBConnect.get_connection()
+        result = []
+        if cnx is None:
+            print("Connessione fallita")
+        else:
+            cursor = cnx.cursor(dictionary=True)
+            query = """select sum(distinct(g.Chromosome)) + sum(distinct(g2.Chromosome)) as peso
+                        from genes g, genes g2 
+                        where g.GeneID = %s and g2.GeneID = %s"""
+            cursor.execute(query, (ID1, ID2))
+
+            for row in cursor:
+                result.append(row["peso"])
+
+            cursor.close()
+            cnx.close()
+        return result
