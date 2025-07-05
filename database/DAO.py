@@ -112,13 +112,13 @@ class DAO():
             print("Connessione fallita")
         else:
             cursor = cnx.cursor(dictionary=True)
-            query = """select sum(distinct(g.Chromosome)) + sum(distinct(g2.Chromosome)) as peso
+            query = """select sum(distinct(g.Chromosome)) as c1, sum(distinct(g2.Chromosome)) as c2
                         from genes g, genes g2 
                         where g.GeneID = %s and g2.GeneID = %s"""
             cursor.execute(query, (ID1, ID2))
 
             for row in cursor:
-                result.append(row["peso"])
+                result.append((row["c1"], row["c2"]))
 
             cursor.close()
             cnx.close()
