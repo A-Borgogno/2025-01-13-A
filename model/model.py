@@ -35,4 +35,4 @@ class Model:
         return list(sorted(list(self._graph.edges(data=True)), key=lambda e:e[2]["weight"]))
 
     def getComponentiConnesse(self):
-        return list(nx.connected_components(self._graph))
+        return sorted(list(nx.connected_components(self._graph)), key=lambda c:len(c), reverse=True)

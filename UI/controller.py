@@ -38,6 +38,10 @@ class Controller:
         componenti_connesse = self._model.getComponentiConnesse()
         for c in componenti_connesse:
             if len(c) > 1:
+                nodi = []
+                for n in list(c):
+                    nodi.append(n.GeneID)
+                self._view.txt_result.controls.append(ft.Text(f"{nodi} | dimensione componente = {len(c)}"))
                 self._view.txt_result.controls.append(ft.Text(f"{list(c)[0].GeneID}, {list(c)[1].GeneID} | dimensione componente = {len(c)}"))
         self._view.update_page()
 
