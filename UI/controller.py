@@ -51,7 +51,7 @@ class Controller:
         path, compConnesse = self._model.getPath()
         self._view.txt_result.controls.append(ft.Text(f"Trovato cammino con dimensione {len(path)}"))
         for p in path:
-            self._view.txt_result.controls.append(ft.Text(f"{p.GeneID}"))
+            self._view.txt_result.controls.append(ft.Text(f"{p}"))
         self._view.txt_result.controls.append(ft.Text(f"Numero componenti connesse: {compConnesse} "))
         self._view.update_page()
 
