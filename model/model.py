@@ -53,11 +53,11 @@ class Model:
         if len(parziale) > len(self._bestSol):
             self._bestSol = copy.deepcopy(parziale)
             self._minConnesse = nx.number_connected_components(nx.subgraph(self._graph, parziale))
-        # elif len(parziale) == len(self._bestSol):
-        #     if len(list(nx.connected_components(nx.subgraph(self._graph, parziale)))) < self._minConnesse:
-        #         self._bestSol = copy.deepcopy(parziale)
-        #         self._minConnesse = len(list(nx.connected_components(nx.subgraph(self._graph, parziale))))
-        for n in self._graph.neighbors(source):
+        elif len(parziale) == len(self._bestSol):
+            if nx.number_connected_components(nx.subgraph(self._graph, parziale)) < self._minConnesse:
+                self._bestSol = copy.deepcopy(parziale)
+                self._minConnesse = nx.number_connected_components(nx.subgraph(self._graph, parziale))
+        for n in self._graph.nodes:
             if n not in parziale:
                 if n.GeneID > source.GeneID and n.Essential == source.Essential:
                     parziale.append(n)

@@ -48,9 +48,9 @@ class Controller:
 
     def handle_path(self, e):
         self._view.txt_result.controls.clear()
-        path, compConnesse = self._model.getPath()
-        self._view.txt_result.controls.append(ft.Text(f"Trovato cammino con dimensione {len(path)}"))
-        for p in path:
+        setNodi, compConnesse = self._model.getPath()
+        self._view.txt_result.controls.append(ft.Text(f"Trovato set con dimensione {len(setNodi)}"))
+        for p in setNodi:
             self._view.txt_result.controls.append(ft.Text(f"{p}"))
         self._view.txt_result.controls.append(ft.Text(f"Numero componenti connesse: {compConnesse} "))
         self._view.update_page()
