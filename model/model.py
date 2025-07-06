@@ -6,6 +6,8 @@ class Model:
     def __init__(self):
         self._graph = nx.Graph()
         self._idMap = {}
+        self._bestSol = []
+        self._minConnesse = None
 
     def getLocalizations(self):
         return DAO.getLocalizations()
@@ -36,3 +38,28 @@ class Model:
 
     def getComponentiConnesse(self):
         return sorted(list(nx.connected_components(self._graph)), key=lambda c:len(c), reverse=True)
+
+    def getPath(self):
+        self._bestSol = []
+        self._minConnesse = None
+
+        for node in self._graph.nodes:
+            if node.Essential != "":
+                self._ricorsione([node], node)
+
+        return self._bestSol, self._minConnesse
+
+    def _ricorsione(self, parziale, source):
+        if len(parziale) > len(self._bestSol):
+            self._bestSol = copy.deepcopy(parziale)
+            self._minConnesse = len(list(nx.connected_components(nx.subgraph(self._graph, parziale))))
+        elif len(parziale) == len(self._bestSol):
+            if len(list(nx.connected_components(nx.subgraph(self._graph, parziale)))) < self._minConnesse:
+                self._bestSol = copy.deepcopy(parziale)
+                self._minConnesse = len(list(nx.connected_components(nx.subgraph(self._graph, parziale))))
+        for n in self._graph.neighbors(source):
+            if n not in parziale:
+                if n.GeneID > source.GeneID and n.Essential == source.Essential:
+                    parziale.append(n)
+                    self._ricorsione(parziale, n)
+                    parziale.pop()

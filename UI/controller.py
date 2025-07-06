@@ -35,16 +35,23 @@ class Controller:
         self._view.update_page()
 
     def analyze_graph(self, e):
+        self._view.txt_result.controls.append(ft.Text(""))
+        self._view.txt_result.controls.append(ft.Text("Le componenti connesse sono:"))
         componenti_connesse = self._model.getComponentiConnesse()
         for c in componenti_connesse:
             if len(c) > 1:
-                nodi = []
+                nodi = ""
                 for n in list(c):
-                    nodi.append(n.GeneID)
+                    nodi += f"{n.GeneID}, "
                 self._view.txt_result.controls.append(ft.Text(f"{nodi} | dimensione componente = {len(c)}"))
-                self._view.txt_result.controls.append(ft.Text(f"{list(c)[0].GeneID}, {list(c)[1].GeneID} | dimensione componente = {len(c)}"))
         self._view.update_page()
 
     def handle_path(self, e):
-        pass
+        self._view.txt_result.controls.clear()
+        path, compConnesse = self._model.getPath()
+        self._view.txt_result.controls.append(ft.Text(f"Trovato cammino con dimensione {len(path)}"))
+        for p in path:
+            self._view.txt_result.controls.append(ft.Text(f"{p.GeneID}"))
+        self._view.txt_result.controls.append(ft.Text(f"Numero componenti connesse: {compConnesse} "))
+        self._view.update_page()
 
