@@ -47,19 +47,19 @@ class Model:
             if node.Essential != "":
                 self._ricorsione([node], node)
 
-        return sorted(list(self._bestSol), key=lambda x:x.GeneID), self._minConnesse
+        return self._bestSol, self._minConnesse
 
     def _ricorsione(self, parziale, source):
         if len(parziale) > len(self._bestSol):
             self._bestSol = copy.deepcopy(parziale)
-            self._minConnesse = len(list(nx.connected_components(nx.subgraph(self._graph, parziale))))
+            self._minConnesse = nx.number_connected_components(nx.subgraph(self._graph, parziale))
         # elif len(parziale) == len(self._bestSol):
         #     if len(list(nx.connected_components(nx.subgraph(self._graph, parziale)))) < self._minConnesse:
         #         self._bestSol = copy.deepcopy(parziale)
         #         self._minConnesse = len(list(nx.connected_components(nx.subgraph(self._graph, parziale))))
         for n in self._graph.neighbors(source):
             if n not in parziale:
-                if n.Essential == source.Essential:
+                if n.GeneID > source.GeneID and n.Essential == source.Essential:
                     parziale.append(n)
                     self._ricorsione(parziale, n)
                     parziale.pop()
